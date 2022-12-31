@@ -1,6 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Build where
+module Build
+  ( runCmd
+  ) where
 
 -- Scanning
 import Data.Text (Text, splitOn)
@@ -64,3 +66,7 @@ scanFile file =
 -- Build
 runCmd :: [Text] -> IO ()
 runCmd args = callCommand . toString $ concatWith args " "
+
+triggerBuildScript :: IO ()
+triggerBuildScript = do
+    
