@@ -67,6 +67,7 @@ executable quartz
     build-depends:
         base ^>=4.17.0.0
       , text
+      , process
     -- Directories containing source files.
     hs-source-dirs:
         app

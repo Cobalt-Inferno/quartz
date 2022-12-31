@@ -2,9 +2,15 @@
 
 module Build where
 
+-- Scanning
 import Data.Text (Text, splitOn)
+import qualified Data.Text.IO as T
 import Errors (Error(..), ErrorType(..), constructError)
 
+-- Build
+import System.Process (callCommand)
+
+-- Scanning
 data Result
   = Success
   | Failure Error
@@ -30,6 +36,10 @@ isAll _ [] = False
 takeFailure :: Result -> Error
 takeFailure (Failure err) = err
 
+strConcat :: [Text] -> Text
+strConcat (x:xs) = x <> strConcat xs
+strConcat [] = ""
+
 -- takeFailure Success = undefined
 scanText :: Text -> Either Text [Error]
 scanText txt =
@@ -37,4 +47,15 @@ scanText txt =
     then Left "Text is clean."
     else Right $ map takeFailure $ filter (/= Success) results
   where
-    results = map scanWord (splitOn " " txt)
+    results = map scanWord $ splitOn "\n" $ strConcat $ splitOn " " txt
+
+scanFile :: FilePath -> IO [Error]
+scanFile file =
+  T.readFile file >>= \contents ->
+    case scanText contents of
+      Left str -> return []
+      Right err -> return err
+
+-- Build
+runCmd :: [Text] -> IO ()
+runCmd
