@@ -68,6 +68,7 @@ executable quartz
         base ^>=4.17.0.0
       , text
       , process
+      , string-convert
     -- Directories containing source files.
     hs-source-dirs:
         app

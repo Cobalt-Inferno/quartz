@@ -6,6 +6,7 @@ module Build where
 import Data.Text (Text, splitOn)
 import qualified Data.Text.IO as T
 import Errors (Error(..), ErrorType(..), constructError)
+import Text.StringConvert (toString)
 
 -- Build
 import System.Process (callCommand)
@@ -40,6 +41,10 @@ strConcat :: [Text] -> Text
 strConcat (x:xs) = x <> strConcat xs
 strConcat [] = ""
 
+concatWith :: [Text] -> Text -> Text
+concatWith (x:xs) v = x <> v <> concatWith xs v
+concatWith [] _ = ""
+
 -- takeFailure Success = undefined
 scanText :: Text -> Either Text [Error]
 scanText txt =
@@ -58,4 +63,4 @@ scanFile file =
 
 -- Build
 runCmd :: [Text] -> IO ()
-runCmd
+runCmd args = callCommand . toString $ concatWith args " "
