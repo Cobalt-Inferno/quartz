@@ -2,6 +2,7 @@
 
 module Fetch where
 
+import Build (runCmd)
 import Control.Monad.Trans.Resource (runResourceT)
 import Data.Conduit.Combinators (sinkFile)
 import Data.Text (Text, splitOn)
@@ -17,3 +18,6 @@ fetchFile url =
     httpSink request $ \_ -> sinkFile $ toString $ last $ splitOn "/" url
   where
     sUrl = toString url
+
+cloneGitRepo :: Text -> IO ()
+cloneGitRepo repo = runCmd ["git", "clone", repo, (last $ splitOn "/" repo)]
