@@ -9,6 +9,7 @@ import Network.HTTP.Client.Conduit (parseRequest)
 import Network.HTTP.Simple (httpSink)
 import Text.StringConvert (toString)
 
+-- We can use fetchFile when git or mercurial is not available.
 fetchFile :: Text -> IO ()
 fetchFile url =
   parseRequest sUrl >>= \request ->
